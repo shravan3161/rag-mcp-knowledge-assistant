@@ -1,0 +1,11 @@
+Product Model X Manual
+
+Product Model X is a multifunction printer designed for office use.
+
+Paper should be loaded into the main paper tray with the printable side facing upward.
+
+The printer supports standard A4 and letter-size paper.
+
+If the printer displays a paper jam warning, turn off the printer before removing the paper.
+
+The printer should be placed on a stable and level surface.

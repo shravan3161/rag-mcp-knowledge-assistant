@@ -1,0 +1,9 @@
+Product Model X Warranty Information
+
+Product Model X is covered by a two-year limited warranty from the date of purchase.
+
+The warranty covers manufacturing defects and hardware failures under normal use.
+
+Damage caused by misuse, unauthorized repairs, or physical accidents is not covered.
+
+For warranty service, contact the authorized technical support team and provide proof of purchase.

@@ -1,0 +1,15 @@
+Printer Model X Troubleshooting Guide
+
+Problem: Printer is making a strange noise.
+
+If the printer is making a strange noise, first check whether the paper feed mechanism is blocked.
+
+Turn off the printer and inspect the paper feed area for any stuck paper or foreign objects.
+
+If the problem continues after removing any obstruction, contact technical support.
+
+Problem: Printer is not printing.
+
+Check that the printer is powered on and connected correctly.
+
+Make sure there is paper in the tray and that the ink or toner cartridge is installed correctly.
