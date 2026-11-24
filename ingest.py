@@ -12,11 +12,34 @@ DATA_FILES = [
 
 CHROMA_DIR = os.getenv("CHROMA_DIR", "./chroma_db")
 COLLECTION_NAME = os.getenv("COLLECTION_NAME", "multi_context_docs")
-EMBEDDING_MODEL_NAME = os.getenv("EMBEDDING_MODEL_NAME", "sentence-transformers/all-MiniLM-L6-v2")
+EMBEDDING_MODEL_NAME = os.getenv(
+    "EMBEDDING_MODEL_NAME", "sentence-transformers/all-MiniLM-L6-v2")
 
 
-def ingest_documents():
+def ingest_documents(force: bool = False):
     print(f"Loading documents into ChromaDB ({CHROMA_DIR})...")
+
+    # Check if vector store already exists and contains documents
+    force_reindex = force or os.getenv(
+        "FORCE_REINDEX", "false").lower() in ("true", "1", "yes")
+    if not force_reindex and os.path.exists(CHROMA_DIR):
+        try:
+            embedding_model = HuggingFaceEmbeddings(
+                model_name=EMBEDDING_MODEL_NAME)
+            existing_store = Chroma(
+                persist_directory=CHROMA_DIR,
+                collection_name=COLLECTION_NAME,
+                embedding_function=embedding_model
+            )
+            count = existing_store._collection.count()
+            if count > 0:
+                print(
+                    f"Vector store already exists with {count} chunks. Skipping ingestion.")
+                return
+        except Exception as e:
+            print(
+                f"Existing vector store check skipped ({e}), proceeding with ingestion...")
+
     documents = []
 
     for file_path, doc_type in DATA_FILES:
@@ -37,8 +60,8 @@ def ingest_documents():
     print(f"Loaded {len(documents)} document sources.")
 
     text_splitter = RecursiveCharacterTextSplitter(
-        chunk_size=200,
-        chunk_overlap=50
+        chunk_size=500,
+        chunk_overlap=100
     )
     chunks = text_splitter.split_documents(documents)
     print(f"Created {len(chunks)} text chunks.")

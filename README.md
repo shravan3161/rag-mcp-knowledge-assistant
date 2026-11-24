@@ -11,7 +11,7 @@ The system indexes multi-domain knowledge (troubleshooting guides, product manua
 ### Key Capabilities
 - **Modular MCP Tools:** Distinct search tools for `troubleshooting`, `manual`, and `warranty`.
 - **FastAPI Endpoint:** Exposes a standard RESTful API for client interaction.
-- **Local LLM & Embeddings:** Powered by `sentence-transformers/all-MiniLM-L6-v2` and `google/flan-t5-base`.
+- **Local LLM & Embeddings:** Powered by `sentence-transformers/all-MiniLM-L6-v2` and `Qwen/Qwen2.5-0.5B-Instruct`.
 - **Containerized:** Docker-ready with pre-indexed knowledge base ingestion.
 
 ---
@@ -138,14 +138,20 @@ To configure in an MCP client (such as Claude Desktop or Cursor), add to your co
 
 ## Docker Deployment
 
-Build and run the containerized application:
+### Using Docker Compose (Recommended)
+```bash
+docker compose up --build
+```
+
+### Using Docker CLI
+Build and run the container with persistent ChromaDB storage:
 
 ```bash
 # Build the Docker image
 docker build -t rag-mcp-assistant .
 
-# Run the container
-docker run -p 8000:8000 rag-mcp-assistant
+# Run the container with a persistent volume for the vector database
+docker run -p 8000:8000 -v chroma_data:/app/chroma_db rag-mcp-assistant
 ```
 
 ---

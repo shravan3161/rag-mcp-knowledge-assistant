@@ -1,9 +1,6 @@
 import asyncio
-import sys
 
-from mcp import ClientSession, StdioServerParameters
-from mcp.client.stdio import stdio_client
-
+from mcp_server import mcp
 from generate_answer import generate_answer
 
 
@@ -50,43 +47,30 @@ async def ask_rag(question: str):
 
     print(f"Selected MCP tool: {selected_tool}")
 
-    server_params = StdioServerParameters(
-        command=sys.executable,
-        args=["mcp_server.py"]
+    # Call selected MCP tool directly through FastMCP (zero subprocess overhead)
+    tool_result = await mcp.call_tool(
+        selected_tool,
+        {
+            "query": question
+        }
     )
 
-    async with stdio_client(server_params) as (read, write):
+    # Extract retrieved context
+    content_list = tool_result[0] if isinstance(tool_result, tuple) else tool_result
+    context = "\n\n".join(
+        c.text for c in content_list if hasattr(c, "text")
+    )
 
-        async with ClientSession(read, write) as session:
+    # Generate final answer
+    answer = generate_answer(
+        question,
+        context
+    )
 
-            await session.initialize()
-
-            # Call selected MCP tool
-            result = await session.call_tool(
-                selected_tool,
-                {
-                    "query": question
-                }
-            )
-
-            # Extract retrieved context
-            context = ""
-
-            for content in result.content:
-
-                if hasattr(content, "text"):
-                    context += content.text + "\n"
-
-            # Generate final answer
-            answer = generate_answer(
-                question,
-                context
-            )
-
-            return {
-                'answer' : answer,
-                'tool_used': selected_tool
-            }
+    return {
+        'answer': answer,
+        'tool_used': selected_tool
+    }
 
 
 async def main():

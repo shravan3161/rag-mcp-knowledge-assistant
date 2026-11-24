@@ -1,0 +1,18 @@
+services:
+  rag-assistant:
+    build: .
+    container_name: rag-mcp-knowledge-assistant
+    ports:
+      - "8000:8000"
+    environment:
+      - CHROMA_DIR=/app/chroma_db
+      - COLLECTION_NAME=multi_context_docs
+      - EMBEDDING_MODEL_NAME=sentence-transformers/all-MiniLM-L6-v2
+      - LLM_MODEL_NAME=Qwen/Qwen2.5-0.5B-Instruct
+      - FORCE_REINDEX=false
+    volumes:
+      - chroma_data:/app/chroma_db
+    restart: unless-stopped
+
+volumes:
+  chroma_data:

@@ -9,5 +9,6 @@ __pycache__/
 .cache/
 .vscode/
 .idea/
+chroma_db/
 
 tests/
