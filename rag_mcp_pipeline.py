@@ -20,17 +20,34 @@ def select_tool(question: str) -> str:
     if any(keyword in question_lower for keyword in warranty_keywords):
         return "warranty_search"
 
-    # Manual/product-related questions
+    # Explicitly catch unsupported features not present in documentation
+    unsupported_features = [
+        "wifi",
+        "wi-fi",
+        "wireless",
+        "bluetooth",
+        "airprint",
+        "router",
+        "5ghz",
+        "network",
+        "mobile print",
+        "scanner",
+        "fax"
+    ]
+    if any(keyword in question_lower for keyword in unsupported_features):
+        return "none"
+
+    # Manual-related questions
     manual_keywords = [
         "paper",
         "a4",
         "letter",
         "specification",
         "specifications",
-        "product",
         "manual",
         "placed",
-        "surface"
+        "surface",
+        "tray"
     ]
 
     if any(keyword in question_lower for keyword in manual_keywords):
