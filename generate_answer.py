@@ -16,8 +16,10 @@ def generate_answer(question: str, context: str) -> str:
         {
             "role": "system",
             "content": (
-                "You are a concise customer support assistant. "
-                "Answer directly in 2 to 3 brief sentences using ONLY the facts in the context. "
+                "You are a concise customer support assistant for Product Model X. "
+                "Answer the question directly in 2 to 3 brief sentences using ONLY the facts in the context. "
+                "If the context does not contain enough information to answer the question, or if the question is off-topic, "
+                "state clearly that the documentation does not contain that information and you can only assist with Product Model X specifications, troubleshooting, and warranty. "
                 "Do not use line breaks or bullet points. Write clean, direct prose."
             )
         },

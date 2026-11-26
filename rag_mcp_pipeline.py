@@ -36,8 +36,35 @@ def select_tool(question: str) -> str:
     if any(keyword in question_lower for keyword in manual_keywords):
         return "manual_search"
 
-    # Default to troubleshooting
-    return "troubleshooting_search"
+    troubleshooting_keywords = [
+        "problem",
+        "error",
+        "issue",
+        "noise",
+        "sound",
+        "print",
+        "printing",
+        "jam",
+        "stuck",
+        "feed",
+        "power",
+        "support",
+        "help",
+        "troubleshoot",
+        "troubleshooting",
+        "fix",
+        "cartridge",
+        "ink",
+        "toner",
+        "clean",
+        "light",
+        "cable"
+    ]
+
+    if any(keyword in question_lower for keyword in troubleshooting_keywords):
+        return "troubleshooting_search"
+
+    return "none"
 
 
 async def ask_rag(question: str):
@@ -46,6 +73,13 @@ async def ask_rag(question: str):
     selected_tool = select_tool(question)
 
     print(f"Selected MCP tool: {selected_tool}")
+
+    # If query is completely off-topic, safely return without calling vector DB or LLM
+    if selected_tool == "none":
+        return {
+            "answer": "I do not have information on that in the documentation. I can only assist with Product Model X troubleshooting, manual specifications, and warranty inquiries.",
+            "tool_used": "none"
+        }
 
     # Call selected MCP tool directly through FastMCP (zero subprocess overhead)
     tool_result = await mcp.call_tool(
